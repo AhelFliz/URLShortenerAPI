@@ -60,7 +60,7 @@ The API will be available at `http://localhost:3000`
 
 Creates a new shortened URL with a randomly generated unique short code.
 
-**Endpoint:** `POST /shorten`
+**Endpoint:** `POST /shortens`
 
 **Request Body:**
 ```json
@@ -77,12 +77,13 @@ Creates a new shortened URL with a randomly generated unique short code.
   "url": "https://www.example.com/some/long/url",
   "shortCode": "abc123",
   "createdAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:00:00Z"
+  "updatedAt": "2021-09-01T12:00:00Z",
+  "accessCount": 0
 }
 ```
 
 **Error Response:**
-- **Status Code:** 400 Bad Request
+- **Status Code:** 422 Unprocessable Entity
 - Returns validation error messages
 
 ---
@@ -91,9 +92,9 @@ Creates a new shortened URL with a randomly generated unique short code.
 
 Retrieves the original URL from a short code.
 
-**Endpoint:** `GET /shorten/:shortCode`
+**Endpoint:** `GET /shortens/:shortCode`
 
-**Example:** `GET /shorten/abc123`
+**Example:** `GET /shortens/abc123`
 
 **Success Response:**
 - **Status Code:** 200 OK
@@ -103,7 +104,8 @@ Retrieves the original URL from a short code.
   "url": "https://www.example.com/some/long/url",
   "shortCode": "abc123",
   "createdAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:00:00Z"
+  "updatedAt": "2021-09-01T12:00:00Z",
+  "accessCount": 0
 }
 ```
 
@@ -117,9 +119,9 @@ Retrieves the original URL from a short code.
 
 Updates the target URL for an existing short code.
 
-**Endpoint:** `PUT /shorten/:shortCode`
+**Endpoint:** `PUT /shortens/:shortCode`
 
-**Example:** `PUT /shorten/abc123`
+**Example:** `PUT /shortens/abc123`
 
 **Request Body:**
 ```json
@@ -136,12 +138,13 @@ Updates the target URL for an existing short code.
   "url": "https://www.example.com/some/updated/url",
   "shortCode": "abc123",
   "createdAt": "2021-09-01T12:00:00Z",
-  "updatedAt": "2021-09-01T12:30:00Z"
+  "updatedAt": "2021-09-01T12:30:00Z",
+  "accessCount": 0
 }
 ```
 
 **Error Responses:**
-- **Status Code:** 400 Bad Request (validation errors)
+- **Status Code:** 422 Unprocessable Entity (validation errors)
 - **Status Code:** 404 Not Found (short code doesn't exist)
 
 ---
@@ -150,9 +153,9 @@ Updates the target URL for an existing short code.
 
 Deletes an existing shortened URL.
 
-**Endpoint:** `DELETE /shorten/:shortCode`
+**Endpoint:** `DELETE /shortens/:shortCode`
 
-**Example:** `DELETE /shorten/abc123`
+**Example:** `DELETE /shortens/abc123`
 
 **Success Response:**
 - **Status Code:** 204 No Content
@@ -167,9 +170,9 @@ Deletes an existing shortened URL.
 
 Retrieves access statistics for a shortened URL.
 
-**Endpoint:** `GET /shorten/:shortCode/stats`
+**Endpoint:** `GET /shortens/:shortCode/stats`
 
-**Example:** `GET /shorten/abc123/stats`
+**Example:** `GET /shortens/abc123/stats`
 
 **Success Response:**
 - **Status Code:** 200 OK
@@ -194,31 +197,31 @@ Retrieves access statistics for a shortened URL.
 
 Create a shortened URL:
 ```bash
-curl -X POST http://localhost:3000/shorten \
+curl -X POST http://localhost:3000/shortens \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.example.com/some/long/url"}'
 ```
 
 Retrieve original URL:
 ```bash
-curl http://localhost:3000/shorten/abc123
+curl http://localhost:3000/shortens/abc123
 ```
 
 Get statistics:
 ```bash
-curl http://localhost:3000/shorten/abc123/stats
+curl http://localhost:3000/shortens/abc123/stats
 ```
 
 Update URL:
 ```bash
-curl -X PUT http://localhost:3000/shorten/abc123 \
+curl -X PUT http://localhost:3000/shortens/abc123 \
   -H "Content-Type: application/json" \
   -d '{"url": "https://www.example.com/new/url"}'
 ```
 
 Delete URL:
 ```bash
-curl -X DELETE http://localhost:3000/shorten/abc123
+curl -X DELETE http://localhost:3000/shortens/abc123
 ```
 
 ## Development
